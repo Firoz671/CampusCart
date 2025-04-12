@@ -1,5 +1,6 @@
 import 'package:campus_cart/ui/screens/home_screen.dart';
 import 'package:campus_cart/ui/screens/main_screen.dart';
+import 'package:campus_cart/ui/screens/register_screen.dart';
 import 'package:campus_cart/ui/screens/widgets/custom_text_form_field.dart';
 import 'package:campus_cart/ui/utils/app_colors.dart';
 import 'package:campus_cart/ui/utils/app_strings.dart';
@@ -75,7 +76,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   ElevatedButton(
                       onPressed: _onTapLoginButton,
-                      child: Text(AppStrings.loginButtonText))
+                      child: Text(AppStrings.loginButtonText)),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Don\'t Have An Account?'),
+                      TextButton(onPressed: _onTapSignUp, child: Text('Sign Up'))
+                    ],
+                  )
                 ],
               ),
             ),
@@ -115,5 +124,8 @@ class _LoginScreenState extends State<LoginScreen> {
           MaterialPageRoute(builder: (context) => MainScreen()),
           (predicate) => false);
     }
+  }
+  void _onTapSignUp(){
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>RegisterScreen()));
   }
 }

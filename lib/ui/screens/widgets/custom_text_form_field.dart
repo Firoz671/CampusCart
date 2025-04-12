@@ -27,7 +27,7 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.all(5),
       child: TextFormField(
         obscureText: obscureText,
         textInputAction: textInputAction,
@@ -35,6 +35,7 @@ class CustomTextFormField extends StatelessWidget {
         controller: controller,
         validator: validator,
         decoration: InputDecoration(
+          errorStyle: TextStyle(fontSize: 18),
             suffixIcon: suffixIcon,
             labelText: labelText,
             filled: true,
