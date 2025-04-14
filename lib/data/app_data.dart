@@ -39,7 +39,7 @@ List<Map<String, dynamic>> products = [
     'title': 'Speed Smartwatch',
     'description': 'Fitness tracker with heart rate monitor and sleep tracking.',
     'price': 7999,
-    'image': 'assets/images/p7.jpeg',
+    'image': 'assets/images/p7.jpg',
   },
   {
     'title': '4G WiFi Router',

@@ -36,19 +36,23 @@ class _ProductScreenState extends State<ProductScreen> {
             SizedBox(
               height: 20,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(products[widget.productIndex]['title']),
-                IconButton(
-                    onPressed: () {
-                      _onTapFavouriteIconButton(
-                        index: widget.productIndex,
-                      );
-                    },
-                    icon: Icon(
-                        _isFavourite ? Icons.favorite : Icons.favorite_border))
-              ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+
+                  Text(products[widget.productIndex]['title']),
+                  IconButton(
+                      onPressed: () {
+                        _onTapFavouriteIconButton(
+                          index: widget.productIndex,
+                        );
+                      },
+                      icon: Icon(
+                          _isFavourite ? Icons.favorite : Icons.favorite_border))
+                ],
+              ),
             ),
             SizedBox(
               height: 20,

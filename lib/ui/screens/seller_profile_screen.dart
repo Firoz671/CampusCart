@@ -1,4 +1,5 @@
 import 'package:campus_cart/ui/screens/widgets/cm_app_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SellerProfileScreen extends StatefulWidget {
@@ -75,4 +76,6 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
   void _onTapBack() {
     Navigator.pop(context);
   }
+
+
 }
