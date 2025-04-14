@@ -1,3 +1,4 @@
+import 'package:campus_cart/data/app_data.dart';
 import 'package:campus_cart/ui/screens/product_screen.dart';
 import 'package:campus_cart/ui/screens/widgets/custom_text_form_field.dart';
 import 'package:campus_cart/ui/utils/app_colors.dart';
@@ -33,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Expanded(
             child: GridView.builder(
-                itemCount: 10,
+                itemCount: products.length,
                 shrinkWrap: true,
                 primary: false,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -42,7 +43,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisCount: 2),
                 itemBuilder: (context, index) {
                   return InkWell(
-                    onTap: _onTapProduct,
+                    onTap: () {
+                      _onTapProduct(index);
+                    },
                     child: Container(
                       height: 150,
                       width: 150,
@@ -50,11 +53,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Stack(
                         children: [
                           Positioned.fill(
-                            child: Image.asset(
-                              'assets/images/potato.jpg',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
+                              child: Image.asset(
+                            products[index]['image'],
+                            fit: BoxFit.cover,
+                            width: 100,
+                            height: 100,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Icon(Icons.error),
+                          )),
                           Positioned(
                             bottom: 0,
                             left: 0,
@@ -63,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   horizontal: 60, vertical: 4),
                               color: Colors.grey,
                               child: Text(
-                                '800 TK',
+                                '${products[index]['price'].toString()} TK',
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold),
@@ -80,7 +86,15 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-  void  _onTapProduct(){
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductScreen()));
+
+  void _onTapProduct(int index) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ProductScreen(
+                  image: products[index]['image'],
+                  price: products[index]['price'],
+                  productIndex: index,
+                )));
   }
 }

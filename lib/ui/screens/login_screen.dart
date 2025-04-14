@@ -4,6 +4,7 @@ import 'package:campus_cart/ui/screens/register_screen.dart';
 import 'package:campus_cart/ui/screens/widgets/custom_text_form_field.dart';
 import 'package:campus_cart/ui/utils/app_colors.dart';
 import 'package:campus_cart/ui/utils/app_strings.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -17,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailTeController = TextEditingController();
   final TextEditingController _passwordTeController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _loginInProgress = false;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -27,65 +29,82 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Form(
               key: _formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    AppStrings.appName,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(color: AppColors.primaryColor),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    AppStrings.welcomeText,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  CustomTextFormField(
-                    validator: _validateEmail,
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
-                    prefixIcon: Icon(Icons.email_outlined),
-                    obscureText: false,
-                    controller: _emailTeController,
-                    labelText: AppStrings.emailText,
-                    hintText: AppStrings.loginHintText,
-                  ),
-                  CustomTextFormField(
-                    validator: _validateStrongPassword,
-                    keyboardType: TextInputType.visiblePassword,
-                    textInputAction: TextInputAction.done,
-                    prefixIcon: Icon(Icons.remove_red_eye_outlined),
-                    obscureText: true,
-                    controller: _passwordTeController,
-                    labelText: AppStrings.passwordText,
-                    hintText: AppStrings.passwordHintText,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  ElevatedButton(
-                      onPressed: _onTapLoginButton,
-                      child: Text(AppStrings.loginButtonText)),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text('Don\'t Have An Account?'),
-                      TextButton(onPressed: _onTapSignUp, child: Text('Sign Up'))
+                      Text(
+                        AppStrings.appName,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(color: AppColors.primaryColor),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        AppStrings.welcomeText,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      CustomTextFormField(
+                        validator: _validateEmail,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        prefixIcon: Icon(Icons.email_outlined),
+                        obscureText: false,
+                        controller: _emailTeController,
+                        labelText: AppStrings.emailText,
+                        hintText: AppStrings.loginHintText,
+                      ),
+                      CustomTextFormField(
+                        validator: _validateStrongPassword,
+                        keyboardType: TextInputType.visiblePassword,
+                        textInputAction: TextInputAction.done,
+                        prefixIcon: Icon(Icons.remove_red_eye_outlined),
+                        obscureText: true,
+                        controller: _passwordTeController,
+                        labelText: AppStrings.passwordText,
+                        hintText: AppStrings.passwordHintText,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            _onTapLoginButton(
+                                email: _emailTeController.text.trim(),
+                                password: _passwordTeController.text.trim());
+                          },
+                          child: Visibility(
+                              visible: _loginInProgress == false,
+                              replacement: Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              child: Text(AppStrings.loginButtonText))),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Don\'t Have An Account?'),
+                          TextButton(
+                              onPressed: _onTapSignUp, child: Text('Sign Up'))
+                        ],
+                      )
                     ],
-                  )
-                ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -118,14 +137,25 @@ class _LoginScreenState extends State<LoginScreen> {
     return null;
   }
 
-  void _onTapLoginButton() {
+  void _onTapLoginButton(
+      {required String email, required String password}) async {
     if (_formKey.currentState!.validate()) {
+      _loginInProgress = true;
+      setState(() {});
+      FirebaseAuth _auth = FirebaseAuth.instance;
+      final user = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      _loginInProgress = false;
+      setState(() {});
+
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => MainScreen()),
           (predicate) => false);
     }
   }
-  void _onTapSignUp(){
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>RegisterScreen()));
+
+  void _onTapSignUp() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => RegisterScreen()));
   }
 }

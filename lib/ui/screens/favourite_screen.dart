@@ -1,3 +1,5 @@
+import 'package:campus_cart/data/app_data.dart';
+import 'package:campus_cart/ui/screens/product_screen.dart';
 import 'package:campus_cart/ui/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -15,14 +17,16 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
       body: Column(
         children: [
           GridView.builder(
-              itemCount: 4,
+              itemCount: favouriteItemIndex.length,
               shrinkWrap: true,
               primary: false,
               gridDelegate:
                   SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
               itemBuilder: (context, index) {
                 return InkWell(
-                  onTap: _onTapProduct,
+                  onTap: () {
+                    _onTapProduct(index: index);
+                  },
                   child: Container(
                     height: 150,
                     width: 150,
@@ -31,7 +35,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                       children: [
                         Positioned.fill(
                           child: Image.asset(
-                            'assets/images/potato.jpg',
+                            products[favouriteItemIndex[index]]['image'],
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -43,7 +47,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                 horizontal: 60, vertical: 4),
                             color: Colors.grey,
                             child: Text(
-                              '800 TK',
+                              '${products[favouriteItemIndex[index]]['price']} TK',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold),
@@ -60,5 +64,13 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
     );
   }
 
-  void _onTapProduct() {}
+  void _onTapProduct({required int index}) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ProductScreen(
+                image: products[favouriteItemIndex[index]]['image'],
+                price: products[favouriteItemIndex[index]]['price'],
+                productIndex: index)));
+  }
 }

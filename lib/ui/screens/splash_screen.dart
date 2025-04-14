@@ -1,6 +1,8 @@
 import 'package:campus_cart/ui/screens/login_screen.dart';
+import 'package:campus_cart/ui/screens/main_screen.dart';
 import 'package:campus_cart/ui/utils/app_colors.dart';
 import 'package:campus_cart/ui/utils/app_strings.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -48,10 +50,17 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _moveToNextScreen() async {
     Future.delayed(Duration(seconds: 2), () {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => LoginScreen()),
-          (predicate) => false);
+      if (FirebaseAuth.instance.currentUser == null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => LoginScreen()),
+            (predicate) => false);
+      } else {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => MainScreen()),
+            (predicate) => false);
+      }
     });
   }
 }

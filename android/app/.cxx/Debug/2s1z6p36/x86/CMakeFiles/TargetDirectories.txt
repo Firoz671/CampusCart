@@ -1,0 +1,2 @@
+C:/Users/Nishak/StudioProjects/campus_cart/android/app/.cxx/Debug/2s1z6p36/x86/CMakeFiles/edit_cache.dir
+C:/Users/Nishak/StudioProjects/campus_cart/android/app/.cxx/Debug/2s1z6p36/x86/CMakeFiles/rebuild_cache.dir
